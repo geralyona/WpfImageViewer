@@ -1,0 +1,28 @@
+﻿using System;
+using System.Windows.Data;
+
+namespace WpfImagesViewer.Converters
+{
+    public class OffsetConverter : IValueConverter
+    {
+        public object Convert(
+            object value,
+            Type targetType,
+            object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            if (value == null)
+                return 0;
+            return (double)value / 4 * (3f / 2f);
+        }
+
+        public object ConvertBack(
+            object value,
+            Type targetType,
+            object parameter,
+            System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

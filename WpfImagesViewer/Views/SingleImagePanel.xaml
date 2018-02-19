@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="WpfImagesViewer.Views.SingleImagePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:common="clr-namespace:WpfImagesViewer.Common"
+             mc:Ignorable="d" Focusable="True"
+             IsVisibleChanged="SingleImagePanel_OnIsVisibleChanged"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries >
+                <ResourceDictionary Source="ManyImagesResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding PrevImageCommand}"/>
+        <KeyBinding Key="Down" Command="{Binding NextImageCommand}"/>
+    </UserControl.InputBindings>
+    <DockPanel Focusable="True">
+        <Grid Width="100" DockPanel.Dock="Right" Background="Azure">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="150"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button DockPanel.Dock="Top" ToolTip="Previous" Margin="20" Grid.Row="1"
+                    Command="{Binding PrevImageCommand}"  VerticalAlignment="Bottom" 
+                    Style="{StaticResource ButtonArrow}" RenderTransformOrigin="0.5,0.5">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button Command="{Binding SelectItem.BlurCommand}" Style="{StaticResource ButtonBlur}"
+                    Margin="20" Grid.Row="2" FontSize="30" Content="Blur"/>
+            <Button ToolTip="Next" Margin="20" Command="{Binding NextImageCommand}" 
+                    Style="{StaticResource ButtonArrow}" VerticalAlignment="Top" Grid.Row="3"/>
+
+        </Grid>
+
+        <ContentControl DataContext="{Binding SelectItem}" Content="{Binding}" ToolTip="{Binding FileName}">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <Image Focusable="True" DataContext="{Binding}" Source="{Binding Image}"  
+                                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                       Margin="10" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding LoadingStatus}" Value="{x:Static common:ImageLoadingStatus.Error}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource Warning}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding LoadingStatus}" Value="{x:Static common:ImageLoadingStatus.Loading}">
+                            <Setter Property="ContentTemplate" Value="{StaticResource Loading}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+
+        <!--Image Focusable="True" DataContext="{Binding SelectItem}" Source="{Binding Image}"  Margin="10" ToolTip="{Binding FileName}"-->
+
+</DockPanel>
+</UserControl>
